@@ -6,7 +6,7 @@ $uri = $_SERVER['REQUEST_URI'] ;
 // якщо у запиті є гет-параметри (знак ?), то прибираємо цю частину
 $pos = strpos( $uri, '?' ) ;
 if( $pos > 0 ) {
-	$uri = substr( $uri, 1, $pos ) ;
+	$uri = substr( $uri, 1, $pos - 1 ) ;
 }
 else{
 	$uri = substr( $uri, 1);
@@ -49,7 +49,8 @@ $routes = [
 	''       => 'index.php',
 	'basics' => 'basics.php',
 	'layout' => 'layout.php',
-	'api' => 'api.php'	
+	'api' => 'api.php',
+	'signup' => 'signup.php'	
 ] ;
 if( isset( $routes[ $uri ] ) ) {   // у маршрутах є відповідний запис
 	$page_body = $routes[ $uri ] ;
