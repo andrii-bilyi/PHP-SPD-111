@@ -3,7 +3,7 @@
   if(isset($_SESSION['user'])){
     $user = $_SESSION['user'];
     $interval = time() - $_SESSION['auth-moment'];
-    if($interval > 30) {
+    if($interval > 60) {
       unset($_SESSION['user']);
       unset($_SESSION['auth-moment']);
       $user = null;
@@ -15,6 +15,17 @@
   }
   else{
     $user = null;
+  }
+
+  if(isset($_GET['logout']) && $_GET['logout'] === 'true') {
+    // Обнулення сесії
+    unset($_SESSION['user']);
+    unset($_SESSION['auth-moment']);
+    $user = null;
+
+    // Перенаправлення користувача на головну сторінку або іншу сторінку
+    header('Location: /');
+    exit;
   }
 ?>
 <!DOCTYPE html>
@@ -32,6 +43,7 @@
   <link rel="stylesheet" href="/css/site.css"/>
 </head>
 <body>
+<div class="navbar-fixed">
     <nav>
     <div class="nav-wrapper orange">
         <a href="/" class="brand-logo"><img src="/img/php.png"/></a>
@@ -43,21 +55,32 @@
             'basics' => 'Основи',
             'layout' => 'Шаблонізація',
             'api' => 'API',
-            'signup' => '<i class="material-icons">person_add</i>',
+
+            // 'signup' => '<i class="material-icons">person_add</i>',
         ] as $href => $name ) : ?>
             <li <?= $uri==$href ? 'class="active"' : '' ?> ><a href="/<?= $href ?>"><?= $name ?></a></li>
-        <?php endforeach ?>  
-        <!-- Modal Trigger -->
-        <li><a href="#auth-modal" class="modal-trigger"><i class="material-icons">key</i></a></li>
-        <!-- <li><a href="/signup"><i class="material-icons">person_add</i></a></li> -->
+        <?php endforeach ?> 
+        
+        <?php if($user != null){ ?>           
+          <li><a href="/profileupdate">
+            <img src="/avatar/<?php echo $user['avatar']; ?>" class="nav-avatar" />
+          </a></li>          
+          <li><a href="?logout=true"><i class="material-icons">logout</i></a></li>
+        <?php } else { ?> 
+          <!-- Modal Trigger -->
+          <li><a href="#auth-modal" class="modal-trigger"><i class="material-icons">key</i></a></li>
+          <li><a href="/signup"><i class="material-icons">person_add</i></a></li>
+        <?php } ?>
     </div>
     </nav>
-
-  Auth in <?= $interval ?> sec
+  </div>
+<!-- <?php echo $user['avatar']; ?> -->
+<!-- <?=var_export($user, true)?> -->
+<!-- Auth in <?= $interval ?> sec -->
   <div class="container">
     <?php include $page_body ; ?>   
   </div>  
-  <footer class="page-footer orange">
+  <!-- <footer class="page-footer orange">
           <div class="container">
             <div class="row">
               <div class="col l6 s12">
@@ -79,7 +102,7 @@
             <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
             </div>
           </div>
-        </footer>
+        </footer> -->
 		
 	
 
@@ -106,6 +129,7 @@
   </div>
 
 </div>
+
 
 
     <!-- Compiled and minified JavaScript -->    

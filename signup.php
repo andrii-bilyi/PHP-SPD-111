@@ -13,7 +13,7 @@
             </div>
             <div class="input-field col s6">
                 <i class="material-icons prefix">mail</i>
-                <input  id="icon_email" type="tel"  name="user-email">
+                <input  id="icon_email" type="email"  name="user-email">
                 <label for="icon_email">E-mail</label>
                 <span class="helper-text"
                       data-error="Це необхідне поле"
